@@ -1,1 +1,141 @@
-Hallo Internet ich bin Alessandra!
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Save the Date – Christoph & Alessandra</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/8/88/Tuscany_Landscape.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0.2em;
+      text-align: center;
+    }
+
+    h2 {
+      font-weight: 400;
+      font-size: 1.5em;
+      margin-bottom: 2em;
+      text-align: center;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-top: 1em;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+
+    button {
+      margin-top: 1.5em;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #ffd1a1;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ffbb77;
+    }
+
+    .download-btn {
+      margin-top: 2em;
+      background-color: #fff;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>Christoph & Alessandra</h1>
+    <h2>Save the Date: 27.06.2026 – Villa de Ricci Rignana, Greve in Chianti</h2>
+
+    <form id="rsvpForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" required>
+
+      <label for="email">E-Mail</label>
+      <input type="email" id="email" required>
+
+      <label for="adresse">Postanschrift</label>
+      <textarea id="adresse" rows="3" required></textarea>
+
+      <button type="submit">Absenden</button>
+    </form>
+
+    <button class="download-btn" onclick="downloadExcel()">Adressen herunterladen</button>
+  </div>
+
+  <script>
+    const entries = [];
+
+    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const adresse = document.getElementById('adresse').value.trim();
+
+      if (name && email && adresse) {
+        entries.push({ Name: name, Email: email, Adresse: adresse });
+
+        alert("Vielen Dank! Deine Daten wurden gespeichert.");
+        this.reset();
+      }
+    });
+
+    function downloadExcel() {
+      if (entries.length === 0) {
+        alert("Es wurden noch keine Daten erfasst.");
+        return;
+      }
+
+      let csv = 'Name,Email,Adresse\n';
+      entries.forEach(row => {
+        csv += `"${row.Name}","${row.Email}","${row.Adresse.replace(/\n/g, ' ')}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "hochzeit_adressen.csv";
+      link.click();
+    }
+  </script>
+</body>
+</html>
